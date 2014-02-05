@@ -2,8 +2,14 @@
 
 Boilerplate code for a Node.js based scraper.
 
+## Installation
+
+```bash
+npm install scrapebp
+```
+
 This module can be forked or depended upon for future scraping projects.
-User only need to specify `opts` and the custom scraper.
+Caller only need to specify `opts` and implement the custom scraper.
 
 ## Usage
 
