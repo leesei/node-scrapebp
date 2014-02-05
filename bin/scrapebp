@@ -1,0 +1,140 @@
+#!/usr/bin/env node
+
+var ScrapeBp = require('..');
+var querystring = require('querystring');
+var util = require('util');
+
+var argv = require("nomnom")
+  .script(require('../package.json').name)
+  .option('url', {
+    position: 0,
+    help: "URL to scrape",
+    list: false,
+    required: true
+  })
+  .option('method', {
+    abbr: 'm',
+    default: 'GET',
+    help: "HTTP method for request"
+  })
+  .option('form', {
+    abbr: 'f',
+    flag: true,
+    default: false,
+    help: "Form-encode request body"
+  })
+  .option('zip', {
+    abbr: 'z',
+    flag: true,
+    default: false,
+    help: "Accept gzipped response"
+  })
+  .option('body', {
+    abbr: 'b',
+    flag: true,
+    default: false,
+    help: "Dump HTTP body from response"
+  })
+  .option('verbose', {
+    abbr: 'v',
+    flag: true,
+    default: false,
+    help: "Print processing logs"
+  })
+  .help("Author: ".bold +
+    "leesei@gmail.com".underline + "       "+
+    "Licence: ".bold + "MIT\n")
+  .parse();
+
+var DemoScraper = {
+  // scrape function
+  // url: original url for scraping
+  // $:   cheerio object for the parsed webpage
+  scrape : function(url, $, callback) {
+    console.info("[%s] processing [%s] ...", this.name, url);
+
+    // show off your cheerio-fu here
+    callback(null, url, {
+      'title': $('title').text(),
+      'links': $('a').map(function(i, el) {
+          return $(this).attr('href');
+        }).toArray().slice(0, 10),
+      'imgs': $('img').map(function(i, el) {
+          return $(this).attr('src');
+        }).toArray().slice(0, 10),
+      'scripts': $('script').map(function(i, el) {
+          return $(this).attr('src');
+        }).toArray().slice(0, 10)
+    });
+  },
+  name: "demo-scraper"
+};
+
+// console.log(argv);
+// normalize argv
+if (!/^https?:\/\//.test(argv.url)) {
+  argv.url = 'http://' + argv.url;
+}
+argv.method = argv.method.toUpperCase();
+
+var opts = {};
+// url to scrape
+opts.url = argv.url;
+// [optional] HTTP method (default = 'GET')
+opts.method = argv.method;
+// [optional] body for request that can carry payload
+// ScrapeBp will set the HTTP 'Content' header, caller should not write to request stream
+// OR caller could leave this empty and do a customized request in 'request' event
+opts.body = {
+  foo: "bar",
+  message: "dummy payload from scrapebp"
+};
+// [optional] apply form encoding to body instead of JSON data (default = false)
+opts.formEncode = argv.form;
+// [optional] whether to accept gzipped response (default = false)
+opts.useZip = argv.zip;
+// [optional] number of redirects (default = 5)
+opts.nRedirect = 2;
+// [optional] cheerio option object
+opts.cheerio_opts = null;
+
+// callback function, parameters depends on scraper.scrape()
+callback = function (err) {
+    args = Array.prototype.slice.call(arguments).splice(1);
+    if (err) {
+      console.error("scrape error:", err);
+      return;
+    }
+    console.info("callback with %d args:", args.length);
+    args.some(function (item, index) {
+      console.info('#%d: %s', index, util.inspect(item));
+    });
+};
+
+var scrapebp = ScrapeBp(opts);
+
+scrapebp.on('request', function(req) {
+  console.log("- %s request ready", opts.method);
+  // can set header here
+  // should not call req.write() as we've set opts.data
+  // check source for how to send request body with req
+});
+
+scrapebp.on('request', function(res) {
+  console.log("- response ready");
+});
+
+scrapebp.on('redirect', function(url, remaining) {
+  console.log("- redirects to: %s (%d remaining)", url, remaining);
+});
+
+scrapebp.on('$ready', function(url, $) {
+  console.log("- $ ready");
+  if (argv.body) {
+    console.log("- body:");
+    console.log($.html());
+  }
+
+  // invoke our scraper
+  DemoScraper.scrape(url, $, callback);
+});
