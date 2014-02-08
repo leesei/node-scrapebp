@@ -60,6 +60,7 @@ var DemoScraper = {
   // scrape function
   // url: original url for scraping
   // $:   cheerio object for the parsed webpage
+  // callbacl: callack function when done
   scrape : function(url, $, callback) {
     console.info("[%s] processing [%s] ...", this.name, url);
 
