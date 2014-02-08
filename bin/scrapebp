@@ -120,7 +120,7 @@ scrapebp.on('request', function(req) {
   // check source for how to send request body with req
 });
 
-scrapebp.on('request', function(res) {
+scrapebp.on('response', function(res) {
   console.log("- response ready");
 });
 
