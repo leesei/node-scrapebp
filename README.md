@@ -22,17 +22,22 @@ var opts = {};
 // url to scrape
 opts.url = argv.url;
 // [optional] HTTP method (default = 'GET')
-opts.method = 'GET';
-// [optional] body for request that can carry payload
+opts.method = argv.method;
+// [optional] body for request that can carry payload (duplex HTTP methods)
 // ScrapeBp will set the HTTP 'Content' header, caller should not write to request stream
-// OR caller could leave this empty and do a customized request in 'request' event
-opts.body = null;
-// [optional] apply form encoding to body instead of JSON data (default = false)
+// OR caller could leave this empty and do a customized request in 'request' event listener
+opts.body = {
+  foo: "bar",
+  message: "dummy payload from scrapebp"
+};
+// [optional] apply form encoding to request body instead of JSON data (default = false)
 opts.formEncode = argv.form;
 // [optional] whether to accept gzipped response (default = false)
 opts.useZip = argv.zip;
+// [optional] encoding for reponse content (default = auto detect)
+opts.encoding = argv.encoding;
 // [optional] number of redirects (default = 5)
-opts.nRedirect = 2;
+opts.nRedirect = 10;
 // [optional] cheerio option object
 opts.cheerio_opts = null;
 
@@ -56,7 +61,8 @@ scrapebp.on('redirect', function(url, remaining) {
 scrapebp.on('$ready', function(url, $) {
   console.log("- $ ready");
   // $ is the cheerio object
-  // use $.html() to get the body
+  // use $.html() to get the response body
+  // useful if the response is not html/xml
 
   // invoke our scraper
   DemoScraper.scrape(url, $, callback);
