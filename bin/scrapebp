@@ -29,11 +29,17 @@ var argv = require("nomnom")
     default: false,
     help: "Accept gzipped response"
   })
-  .option('body', {
+  .option('dumpHeader', {
+    abbr: 'h',
+    flag: true,
+    default: false,
+    help: "Dump HTTP response header"
+  })
+  .option('dumpBody', {
     abbr: 'b',
     flag: true,
     default: false,
-    help: "Dump HTTP body from response"
+    help: "Dump HTTP response body"
   })
   .option('verbose', {
     abbr: 'v',
@@ -82,14 +88,14 @@ var opts = {};
 opts.url = argv.url;
 // [optional] HTTP method (default = 'GET')
 opts.method = argv.method;
-// [optional] body for request that can carry payload
+// [optional] body for request, only for duplex HTTP methods
 // ScrapeBp will set the HTTP 'Content' header, caller should not write to request stream
 // OR caller could leave this empty and do a customized request in 'request' event
 opts.body = {
   foo: "bar",
   message: "dummy payload from scrapebp"
 };
-// [optional] apply form encoding to body instead of JSON data (default = false)
+// [optional] apply form encoding to request body instead of JSON data (default = false)
 opts.formEncode = argv.form;
 // [optional] whether to accept gzipped response (default = false)
 opts.useZip = argv.zip;
@@ -100,6 +106,7 @@ opts.cheerio_opts = null;
 
 // callback function, parameters depends on scraper.scrape()
 callback = function (err) {
+    console.info();
     args = Array.prototype.slice.call(arguments).splice(1);
     if (err) {
       console.error("scrape error:", err);
@@ -109,6 +116,7 @@ callback = function (err) {
     args.some(function (item, index) {
       console.info('#%d: %s', index, util.inspect(item));
     });
+    console.info();
 };
 
 var scrapebp = ScrapeBp(opts);
@@ -122,6 +130,10 @@ scrapebp.on('request', function(req) {
 
 scrapebp.on('response', function(res) {
   console.log("- response ready");
+  if (argv.dumpHeader) {
+    console.log("- header:");
+    console.log(res.headers);
+  }
 });
 
 scrapebp.on('redirect', function(url, remaining) {
@@ -130,7 +142,8 @@ scrapebp.on('redirect', function(url, remaining) {
 
 scrapebp.on('$ready', function(url, $) {
   console.log("- $ ready");
-  if (argv.body) {
+
+  if (argv.dumpBody) {
     console.log("- body:");
     console.log($.html());
   }
