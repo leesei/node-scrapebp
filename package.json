@@ -1,6 +1,6 @@
 {
   "name": "scrapebp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Boilerplate code for a Node.js scraper with CLI",
   "author": {
     "name": "KY LEE",
@@ -23,12 +23,13 @@
     "url": "http://github.com/leesei/node-scrapebp/issues"
   },
   "dependencies": {
+    "charset": "*",
+    "cheerio": "*",
+    "clone": "*",
     "concat-stream": "*",
     "hyperquest": "*",
-    "cheerio": "*",
-    "nomnom": "*",
     "iconv-lite": "*",
-    "charset": "*"
+    "nomnom": "*",
   },
   "license": "MIT"
 }
