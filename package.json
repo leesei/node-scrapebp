@@ -29,7 +29,7 @@
     "concat-stream": "*",
     "hyperquest": "*",
     "iconv-lite": "*",
-    "nomnom": "*",
+    "nomnom": "*"
   },
   "license": "MIT"
 }
