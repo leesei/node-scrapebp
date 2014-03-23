@@ -13,7 +13,7 @@ Caller only need to specify `opts` and implement the custom scraper.
 
 ## Usage
 
-See [bin/scrapebp.js](bin/scrapebp.js).
+See [bin/scrapebp](bin/scrapebp).
 
 ```javascript
 var ScrapeBp = require('scrapebp');
