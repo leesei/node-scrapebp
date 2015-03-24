@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/scrapebp.svg?style=flat-square)](https://www.npmjs.com/scrapebp)
 [![npm downloads](https://img.shields.io/npm/l/scrapebp.svg?style=flat-square)](https://www.npmjs.com/scrapebp)
-[![dependency status](https://img.shields.io/david/leesei/scrapebp.svg?style=flat-square)](https://david-dm.org/leesei/scrapebp)
+[![dependency status](https://img.shields.io/david/leesei/node-scrapebp.svg?style=flat-square)](https://david-dm.org/leesei/node-scrapebp)
 
 Boilerplate code for a Node.js based scraper.
 
