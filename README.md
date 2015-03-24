@@ -1,5 +1,9 @@
 # node-scrapebp
 
+[![npm](https://img.shields.io/npm/v/scrapebp.svg)](https://www.npmjs.com/node-scrapebp)
+[![npm](https://img.shields.io/npm/l/scrapebp.svg)]()
+[![David](https://img.shields.io/david/leesei/node-scrapebp.svg)]()
+
 Boilerplate code for a Node.js based scraper.
 
 ## Installation
@@ -8,7 +12,7 @@ Boilerplate code for a Node.js based scraper.
 npm install scrapebp
 ```
 
-This module can be forked or depended upon for future scraping projects.
+This module can be forked or depended upon for future scraping projects.  
 Caller only need to specify `opts` and implement the custom scraper.
 
 ## Usage
