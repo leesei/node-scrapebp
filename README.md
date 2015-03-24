@@ -1,6 +1,6 @@
 # node-scrapebp
 
-[![npm](https://img.shields.io/npm/v/scrapebp.svg)](https://www.npmjs.com/node-scrapebp)
+[![npm](https://img.shields.io/npm/v/scrapebp.svg)](https://www.npmjs.com/scrapebp)
 [![npm](https://img.shields.io/npm/l/scrapebp.svg)]()
 [![David](https://img.shields.io/david/leesei/node-scrapebp.svg)]()
 
