@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var ScrapeBp = require('..');
+var chalk = require('nomnom/node_modules/chalk');
 var querystring = require('querystring');
 var util = require('util');
 
@@ -51,9 +52,10 @@ var argv = require("nomnom")
     default: false,
     help: "Print processing logs"
   })
-  .help("Author: ".bold +
-    "leesei@gmail.com".underline + "       "+
-    "Licence: ".bold + "MIT\n")
+  .help(chalk.bold("Author: ") +
+    chalk.underline("leesei@gmail.com") + "       "+
+    chalk.bold("Licence: ") + "MIT\n")
+
   .parse();
 
 var DemoScraper = {
