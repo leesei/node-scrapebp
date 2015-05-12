@@ -1,6 +1,6 @@
 {
   "name": "scrapebp",
-  "version": "0.2.2",
+  "version": "0.3.2",
   "description": "Boilerplate code for a Node.js scraper with CLI",
   "author": {
     "name": "KY LEE",

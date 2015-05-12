@@ -76,6 +76,8 @@ scrapebp.on('$ready', function(url, $) {
 
 The logic of [hyperdirect](https://github.com/hyperquest/hyperdirect) is also integrated here. We don't need the full capbility of hyperdirect. Reducing dependencies is another reason for the integration.
 
+> Move to [tomas/needle](https://github.com/tomas/needle) or [hapijs/wreck](https://github.com/hapijs/wreck)? Streaming of hyperrequest was not used.
+
 ## Reference for dependencies 
 
 cheerio:     https://github.com/MatthewMueller/cheerio
