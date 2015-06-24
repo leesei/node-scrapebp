@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+"use strict";
+
 var ScrapeBp = require('..');
 var chalk = require('nomnom/node_modules/chalk');
 var querystring = require('querystring');
@@ -30,10 +32,10 @@ var argv = require("nomnom")
     default: false,
     help: "Accept gzipped response"
   })
-  .option('encoding', {
-    abbr: 'e',
-    help: "Encoding of the response content, default = auto detect"
-  })
+  // .option('encoding', {
+  //   abbr: 'e',
+  //   help: "Encoding of the response content, default = auto detect"
+  // })
   .option('dumpHeader', {
     abbr: 'H',
     flag: true,
@@ -46,12 +48,12 @@ var argv = require("nomnom")
     default: false,
     help: "Dump HTTP response body"
   })
-  .option('verbose', {
-    abbr: 'v',
-    flag: true,
-    default: false,
-    help: "Print processing logs"
-  })
+  // .option('verbose', {
+  //   abbr: 'v',
+  //   flag: true,
+  //   default: false,
+  //   help: "Print processing logs"
+  // })
   .help(chalk.bold("Author: ") +
     chalk.underline("leesei@gmail.com") + "       "+
     chalk.bold("Licence: ") + "MIT\n")
@@ -95,9 +97,15 @@ var opts = {};
 opts.url = argv.url;
 // [optional] HTTP method (default = 'GET')
 opts.method = argv.method;
-// [optional] body for request that can carry payload (duplex HTTP methods)
-// ScrapeBp will set the HTTP 'Content' header, caller should not write to request stream
-// OR caller could leave this empty and do a customized request in 'request' event listener
+// [optional] custom header for request
+opts.headers = {
+  foo: "bar",
+  "x-foo": "x-bar"
+};
+// [optional] body for request
+// ScrapeBp will set the HTTP 'Content' header according to `formEncode`
+// NOTE: server is not required to handle body of GET requests
+// http://stackoverflow.com/questions/978061/http-get-with-request-body
 opts.body = {
   foo: "bar",
   message: "dummy payload from scrapebp"
@@ -106,57 +114,61 @@ opts.body = {
 opts.formEncode = argv.form;
 // [optional] whether to accept gzipped response (default = false)
 opts.useZip = argv.zip;
-// [optional] encoding for reponse content (default = auto detect)
-opts.encoding = argv.encoding;
+// [optional] encoding for response content (default = auto detect)
+// opts.encoding = argv.encoding;
 // [optional] number of redirects (default = 5)
 opts.nRedirect = 10;
 // [optional] cheerio option object
 opts.cheerio_opts = null;
 
+var scrapebp = ScrapeBp(opts);
+
+scrapebp.on('headers', function (headers) {
+  console.log("- %s headers ready", opts.method);
+  if (argv.dumpHeader) {
+    console.log(headers);
+  }
+});
+
+scrapebp.on('redirect', function (url, remaining) {
+  console.log("- redirects to: %s (%d remaining)", url, remaining);
+});
+
+scrapebp.on('error', function (err) {
+  console.error(err);
+});
+
+scrapebp.on('response', function (resp) {
+  console.log("- response ready");
+});
+
+scrapebp.on('$ready', function(url, $) {
+  console.log("- $ ready");
+  // $ is the cheerio object
+  // use $.html() to get the response body
+  // useful if the response is not html/xml
+
+  if (argv.dumpBody) {
+    console.log("body:");
+    console.log($.html());
+  }
+
+  // invoke our scraper
+  DemoScraper.scrape(url, $, scrapeCallback);
+});
+
 // callback function, parameters depends on scraper.scrape()
-callback = function (err) {
+function scrapeCallback(err) {
     console.info();
-    args = Array.prototype.slice.call(arguments).splice(1);
     if (err) {
       console.error("scrape error:", err);
       return;
     }
+
+    var args = Array.prototype.slice.call(arguments, 1);
     console.info("callback with %d args:", args.length);
     args.some(function (item, index) {
       console.info('#%d: %s', index, util.inspect(item));
     });
     console.info();
 };
-
-var scrapebp = ScrapeBp(opts);
-
-scrapebp.on('request', function(req) {
-  console.log("- %s request ready", opts.method);
-  // can set header here
-  // should not call req.write() as we've set opts.data
-  // check source for how to send request body with req
-});
-
-scrapebp.on('response', function(res) {
-  console.log("- response ready");
-  if (argv.dumpHeader) {
-    console.log("- header:");
-    console.log(res.headers);
-  }
-});
-
-scrapebp.on('redirect', function(url, remaining) {
-  console.log("- redirects to: %s (%d remaining)", url, remaining);
-});
-
-scrapebp.on('$ready', function(url, $) {
-  console.log("- $ ready");
-
-  if (argv.dumpBody) {
-    console.log("- body:");
-    console.log($.html());
-  }
-
-  // invoke our scraper
-  DemoScraper.scrape(url, $, callback);
-});
