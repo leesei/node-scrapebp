@@ -4,8 +4,6 @@
 [![npm downloads](https://img.shields.io/npm/l/scrapebp.svg?style=flat-square)](https://www.npmjs.com/scrapebp)
 [![dependency status](https://img.shields.io/david/leesei/node-scrapebp.svg?style=flat-square)](https://david-dm.org/leesei/node-scrapebp)
 
-Boilerplate code for a Node.js based scraper.
-
 ## Installation
 
 ```bash
@@ -17,39 +15,13 @@ Caller only need to specify `opts` and implement the custom scraper and scrape c
 
 ## Usage
 
-See [bin/scrapebp](bin/scrapebp).
+See [bin/scrapebp](bin/scrapebp) for details.
 
 ```javascript
 var ScrapeBp = require('scrapebp');
 
 // DemoScraper and scrapeCallback are defined
-
-var opts = {};
-// url to scrape
-opts.url = argv.url;
-// [optional] HTTP method (default = 'GET')
-opts.method = argv.method;
-// [optional] custom header for request
-opts.headers = {
-  foo: "bar",
-  "x-foo": "x-bar"
-};
-// [optional] body for request
-// ScrapeBp will set the HTTP 'Content' header according to `formEncode`
-// NOTE: server is not required to handle body of GET requests
-// http://stackoverflow.com/questions/978061/http-get-with-request-body
-opts.body = {
-  foo: "bar",
-  message: "dummy payload from scrapebp"
-};
-// [optional] apply form encoding to request body instead of JSON data (default = false)
-opts.formEncode = argv.form;
-// [optional] whether to accept gzipped response (default = false)
-opts.useZip = argv.zip;
-// [optional] number of redirects (default = 5)
-opts.nRedirect = 10;
-// [optional] cheerio option object
-opts.cheerio_opts = null;
+// opts for ScrapeBp is prepared
 
 var scrapebp = ScrapeBp(opts);
 
@@ -66,10 +38,6 @@ scrapebp.on('redirect', function (url, remaining) {
 
 scrapebp.on('error', function (err) {
   console.error(err);
-});
-
-scrapebp.on('response', function (resp) {
-  console.log("- response ready");
 });
 
 scrapebp.on('$ready', function(url, $) {
@@ -113,13 +81,13 @@ write tests that covers:
 - GET with query string
 - POST with payload
 - redirects
-- non UTF-8 page
-- cheerio `.html()` are unicode literals (e.g.: &#x5229;)?
 - use of compression (`-z` and check response header and decoded body)
 - error handling
 
 features:
-- character set detection
+- character set detection with [aadsm/jschardet](https://github.com/aadsm/jschardet)? (in case HTTP header and HTML meta did not signals charset)
 - promisify?
 - browserify
 
+bug:
+- multi-byte cut-off (https://github.com/tomas/needle/issues/88)

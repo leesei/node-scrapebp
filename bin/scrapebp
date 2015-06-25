@@ -29,7 +29,7 @@ var argv = require("nomnom")
   .option('zip', {
     abbr: 'z',
     flag: true,
-    default: false,
+    default: true,
     help: "Accept gzipped response"
   })
   // .option('encoding', {
@@ -97,11 +97,6 @@ var opts = {};
 opts.url = argv.url;
 // [optional] HTTP method (default = 'GET')
 opts.method = argv.method;
-// [optional] custom header for request
-opts.headers = {
-  foo: "bar",
-  "x-foo": "x-bar"
-};
 // [optional] body for request
 // ScrapeBp will set the HTTP 'Content' header according to `formEncode`
 // NOTE: server is not required to handle body of GET requests
@@ -110,14 +105,21 @@ opts.body = {
   foo: "bar",
   message: "dummy payload from scrapebp"
 };
-// [optional] apply form encoding to request body instead of JSON data (default = false)
-opts.formEncode = argv.form;
-// [optional] whether to accept gzipped response (default = false)
-opts.useZip = argv.zip;
 // [optional] encoding for response content (default = auto detect)
 // opts.encoding = argv.encoding;
-// [optional] number of redirects (default = 5)
-opts.nRedirect = 10;
+opts.needle_opts = {
+  // [optional] whether to accept gzipped response (default = true)
+  compressed: argv.zip,
+  // [optional] number of redirects to follow (default = 5, set to 0 to disable )
+  follow: 10,
+  // [optional] custom header for request
+  headers: {
+    foo: "bar",
+    "x-foo": "x-bar"
+  },
+  // [optional] apply form encoding to request body instead of JSON data (default = false)
+  json: !argv.form
+};
 // [optional] cheerio option object
 opts.cheerio_opts = null;
 
@@ -136,10 +138,6 @@ scrapebp.on('redirect', function (url, remaining) {
 
 scrapebp.on('error', function (err) {
   console.error(err);
-});
-
-scrapebp.on('response', function (resp) {
-  console.log("- response ready");
 });
 
 scrapebp.on('$ready', function(url, $) {
