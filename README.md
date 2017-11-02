@@ -1,7 +1,7 @@
 # node-scrapebp
 
-> the npm package `node-scrapebp` is DEPRECATED, source can be found in `deprecated` branch  
-> with modern library, there's not need for any wrapper code  
+> the npm package `node-scrapebp` is DEPRECATED, source of package can be found in `deprecated` branch  
+> with modern library, there's not need for any wrapper library  
 > this repo now serves as boilerplate for a Node.js scraper
 
 ## Usage
@@ -15,7 +15,7 @@ yarn install
 ./index.js $URL
 ```
 
-`index.js` is the boilerplate code for `fetch()` and `cheerio`.  
+`index.js` is the boilerplate code for setting up `fetch()` and `cheerio`.  
 You should implement a new Scraper to scrape your site and modify this line:
 
 ```js

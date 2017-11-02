@@ -1,10 +1,9 @@
 // scrape function
 // res: `node-fetch` `Response` object (https://github.com/bitinn/node-fetch#interface-body)
-// $:   `cheerio` object for the parsed HTML page
+// $:   `cheerio` object (https://github.com/cheeriojs/cheerio#api)
 // return: Promise of scraped result
-//
 module.exports = (res, $) => {
-  console.info('processing ...');
+  console.info('processing [%s] ...', res.url);
 
   // show off your cheerio-fu here
   return Promise.resolve({
