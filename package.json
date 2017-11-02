@@ -1,20 +1,20 @@
 {
   "name": "scrapebp",
-  "version": "0.5.0",
-  "description": "Boilerplate code for a Node.js scraper with CLI",
+  "version": "1.0.0",
+  "description": "Boilerplate code for a Node.js scraper",
   "author": {
     "name": "KY LEE",
     "email": "leesei@gmail.com",
     "url": "http://leesei.github.io/"
+  },
+  "engines": {
+    "node": ">=8.0"
   },
   "keywords": [
     "scraper",
     "crawler",
     "boilerplate"
   ],
-  "bin": {
-    "scrapebp": "bin/scrapebp"
-  },
   "repository": {
     "type": "git",
     "url": "http://github.com/leesei/node-scrapebp"
@@ -23,11 +23,8 @@
     "url": "http://github.com/leesei/node-scrapebp/issues"
   },
   "dependencies": {
-    "cheerio": "*",
-    "clone": "*",
-    "debug": "*",
-    "deep-defaults": "*",
-    "needle": "*",
+    "cheerio": "^1.0.0-rc.2",
+    "node-fetch": "^2.0.0-alpha.9",
     "nomnom": "*"
   },
   "license": "MIT"
