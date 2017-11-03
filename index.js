@@ -61,7 +61,7 @@ if (!/^https?:\/\//.test(argv.url)) {
   // use `res.textConverted()` if the page is not UTF8
   // requires `encoding` package
   const html = await res.text();
-  $ = cheerio.load(html, cheerioOpts);
+  const $ = cheerio.load(html, cheerioOpts);
   if (argv.dumpBody) {
     console.log('body:');
     console.log($.html());

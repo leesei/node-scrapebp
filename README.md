@@ -1,7 +1,7 @@
 # node-scrapebp
 
-> the npm package `node-scrapebp` is DEPRECATED, source of package can be found in `deprecated` branch  
-> with modern library, there's not need for any wrapper library  
+> the npm package `node-scrapebp` is DEPRECATED, source code of package can be found in `deprecated` branch  
+> with modern stack, there's not need for any wrapper library  
 > this repo now serves as boilerplate for a Node.js scraper
 
 ## Usage
