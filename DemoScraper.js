@@ -3,22 +3,25 @@
 // $:   `cheerio` object with page loaded (https://github.com/cheeriojs/cheerio#api)
 // return: Promise of scraped result
 module.exports = (res, $) => {
-  console.info('processing [%s] ...', res.url);
+  console.info("processing [%s] ...", res.url);
 
   // show off your cheerio-fu here
   return Promise.resolve({
-    title: $('title').text().trim(),
-    links: $('a')
+    title: $("title")
+      .text()
+      .trim(),
+    links: $("a")
       .toArray()
-      .map(el => $(el).attr('href'))
+      .map(el => $(el).attr("href"))
       .slice(0, 10),
-    imgs: $('img')
+    imgs: $("img")
       .toArray()
-      .map(el => $(el).attr('src'))
+      .map(el => $(el).attr("src"))
       .slice(0, 10),
-    scripts: $('script')
+    scripts: $("script")
       .toArray()
-      .map(el => $(el).attr('src'))
-      .slice(0, 10),
+      .map(el => $(el).attr("src"))
+      .filter(src => !!src)
+      .slice(0, 10)
   });
 };

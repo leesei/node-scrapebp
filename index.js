@@ -1,46 +1,46 @@
 #!/usr/bin/env node
 
-const chalk = require('chalk');
-const cheerio = require('cheerio');
-const fetch = require('node-fetch');
-const package = require('./package.json');
+const chalk = require("chalk");
+const cheerio = require("cheerio");
+const fetch = require("node-fetch");
+const package = require("./package.json");
 
-const scraper = require('./DemoScraper');
+const scraper = require("./DemoScraper");
 
-var argv = require('nomnom')
+const argv = require("nomnom")
   .script(package.name)
-  .option('url', {
+  .option("url", {
     position: 0,
-    help: 'URL to scrape',
+    help: "URL to scrape",
     list: false,
-    required: true,
+    required: true
   })
-  .option('dumpHeader', {
-    abbr: 'H',
+  .option("dumpHeader", {
+    abbr: "H",
     flag: true,
     default: false,
-    help: 'Dump HTTP response header',
+    help: "Dump HTTP response header"
   })
-  .option('dumpBody', {
-    abbr: 'B',
+  .option("dumpBody", {
+    abbr: "B",
     flag: true,
     default: false,
-    help: 'Dump HTTP response body',
+    help: "Dump HTTP response body"
   })
   .help(
-    chalk.bold('Author: ') +
-      chalk.underline('leesei@gmail.com') +
-      '       ' +
-      chalk.bold('Licence: ') +
+    chalk.bold("Author: ") +
+      chalk.underline("leesei@gmail.com") +
+      "       " +
+      chalk.bold("Licence: ") +
       package.licence +
-      '\n'
+      "\n"
   )
   .parse();
 
 // console.log(argv);
 // normalize argv
 if (!/^https?:\/\//.test(argv.url)) {
-  argv.url = 'http://' + argv.url;
+  argv.url = "http://" + argv.url;
 }
 
 (async () => {
@@ -48,13 +48,13 @@ if (!/^https?:\/\//.test(argv.url)) {
   const cheerioOpts = {
     xmlMode: false,
     decodeEntities: true,
-    lowerCaseTags: true,
+    lowerCaseTags: true
   };
 
   // https://github.com/bitinn/node-fetch#fetchurl-options
   const res = await fetch(argv.url, fetchOpts);
   if (argv.dumpHeader) {
-    console.log('headers:');
+    console.log("headers:");
     console.log(res.headers.raw());
   }
 
@@ -63,7 +63,7 @@ if (!/^https?:\/\//.test(argv.url)) {
   const html = await res.text();
   const $ = cheerio.load(html, cheerioOpts);
   if (argv.dumpBody) {
-    console.log('body:');
+    console.log("body:");
     console.log($.html());
   }
 
