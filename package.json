@@ -1,6 +1,6 @@
 {
   "name": "scrapebp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Boilerplate code for a Node.js scraper",
   "author": {
     "name": "KY LEE",
@@ -23,7 +23,7 @@
     "url": "http://github.com/leesei/node-scrapebp/issues"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
+    "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.3.0",
     "nomnom": "*"
   },
